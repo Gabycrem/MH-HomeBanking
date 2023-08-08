@@ -28,14 +28,14 @@ public class ClientController {
     private AccountRepository accountRepository;
 
     @RequestMapping("/clients")
-    @JsonIgnore
+
     public List<ClientDTO> getClients(){
         return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(toList());
     }
 
-    public Set<AccountDTO> getAccounts(){
+   /* public Set<AccountDTO> getAccounts(){
         return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toSet());
-    }
+    }*/
 
     @RequestMapping("/clients/{id}")
     public ClientDTO getClient(@PathVariable Long id){
