@@ -38,7 +38,7 @@ public class ClientDTO {
         return email;
     }
 
-    public Set<Account> getAccountsDTO() {
+    public Set<Account> getAccounts() {
         return accounts;
     }
 

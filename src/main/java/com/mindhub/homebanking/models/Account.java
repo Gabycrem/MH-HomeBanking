@@ -20,8 +20,8 @@ public class Account {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "propiertor_id")
-    private Client propiertor;
+    @JoinColumn(name = "client_id")
+    private Client client;
 
     public Account(){
 
@@ -62,11 +62,11 @@ public class Account {
     }
 
     @JsonIgnore
-    public Client getPropiertor() {
-        return propiertor;
+    public Client getClient() {
+        return client;
     }
 
-    public void setPropiertor(Client propiertor) {
-        this.propiertor = propiertor;
+    public void setClient(Client client) {
+        this.client = client;
     }
 }
