@@ -1,11 +1,9 @@
 package com.mindhub.homebanking;
 
-import com.mindhub.homebanking.models.Account;
-import com.mindhub.homebanking.models.Client;
-import com.mindhub.homebanking.models.Transaction;
-import com.mindhub.homebanking.models.TransactionType;
+import com.mindhub.homebanking.models.*;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.repositories.LoanRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +13,8 @@ import org.springframework.context.annotation.Bean;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
 
 @SpringBootApplication
 public class HomebankingApplication {
@@ -24,7 +24,8 @@ public class HomebankingApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository, TransactionRepository transactionRepository){
+	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository,
+									  TransactionRepository transactionRepository, LoanRepository loanRepository){
 		return (args -> {
 			//Creando clientes 1 y 2
 			Client client1 = new Client("Melba","Morel", "melba@mindhub.com");
@@ -86,6 +87,15 @@ public class HomebankingApplication {
 			Transaction transaction5 = new Transaction(TransactionType.DEBIT, -1500.0, "Débito $1500", LocalDateTime.now());
 			account4.addTransaction(transaction5);
 			transactionRepository.save(transaction5);
+
+
+			//Créditos para Task4
+			Loan loan1 = new Loan("Hipotecario", 500000.0, List.of(12,24,36,48,60));
+			loanRepository.save(loan1);
+			Loan loan2 = new Loan("Personal", 100000.0, List.of(6,12,24));
+			loanRepository.save(loan2);
+			Loan loan3 = new Loan("Automotriz", 300000.0, List.of(6,12,24,36));
+			loanRepository.save(loan3);
 		});
 	}
 
