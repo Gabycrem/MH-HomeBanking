@@ -17,6 +17,9 @@ public class Loan {
     @Column(name = "payment")
     private List<Integer> payments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "loan", fetch = FetchType.EAGER)
+    private Set<ClientLoan> clientLoans;
+
 
     public Loan(){
 
@@ -57,4 +60,12 @@ public class Loan {
         this.payments = payments;
     }
 
+    public Set<ClientLoan> getClientLoans() {
+        return clientLoans;
+    }
+
+    public void addClientLoans(ClientLoan clientLoan){
+        clientLoan.setLoan(this);
+        clientLoans.add(clientLoan);
+    }
 }
