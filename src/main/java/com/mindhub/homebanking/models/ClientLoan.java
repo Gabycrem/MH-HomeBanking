@@ -1,7 +1,6 @@
 package com.mindhub.homebanking.models;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.GenericGenerators;
 
 import javax.persistence.*;
 
@@ -26,7 +25,7 @@ public class ClientLoan {
 
     }
 
-    public ClientLoan(Double amount, Integer payments, Loan loan, Client client){
+    public ClientLoan(Double amount, Integer payments, Client client, Loan loan){
         this.amount = amount;
         this.payments = payments;
         this.client = client;

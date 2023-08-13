@@ -96,8 +96,14 @@ public class HomebankingApplication {
 			loanRepository.save(loan3);
 
 			//Créditos para Melba y segundo client
-			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60, loan1,client1);
+			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60, client1, loan1);
+			client1.addClientLoans(clientLoan1);
+			loan1.addClientLoans(clientLoan1);
 			clientLoanRepository.save(clientLoan1);
+			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12, client1, loan2);
+			loan2.addClientLoans(clientLoan2);
+			client1.addClientLoans(clientLoan2);
+			clientLoanRepository.save(clientLoan2);
 		});
 	}
 

@@ -19,9 +19,7 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
-
     @RequestMapping("/clients")
-
     public List<ClientDTO> getClients(){
         return clientRepository.findAll().stream().map(client -> new ClientDTO(client)).collect(toList());
     }
