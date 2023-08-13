@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Client {
 
+    //------------------- Propiedades ---------------------//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -21,7 +22,7 @@ public class Client {
     private String email;
 
 
-    // --------Relaciones------------
+    // -------------------Relaciones----------------//
     @OneToMany(mappedBy = "client", fetch = FetchType.EAGER)
     private Set<Account> accounts = new HashSet<>();
 
@@ -29,7 +30,7 @@ public class Client {
     private Set<ClientLoan> loans = new HashSet<>();
 
 
-    // ---------Constructores ----------
+    // ---------------------Constructores -------------------//
     public Client() {
     }
 
@@ -39,7 +40,7 @@ public class Client {
         this.email = email;
     }
 
-    //---------- Getters y Setters------------------
+    //----------------- Getters y Setters------------------//
     public Long getId(){
         return id;
     }
@@ -75,7 +76,7 @@ public class Client {
         return loans;
     }
 
-    // ---------- Métodos ADD y Otros -----------------
+    // ---------- Métodos ADD y Otros ----------------- //
 
     public void addAccount(Account account){
         account.setClient(this);

@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Entity
 public class Transaction {
 
+    //------------------- Propiedades ---------------------//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name= "native", strategy = "native")
@@ -17,10 +18,12 @@ public class Transaction {
     private String description;
     private LocalDateTime date;
 
+    // -------------------Relaciones----------------//
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "account_id")
     private Account account;
 
+    // ---------------------Constructores -------------------//
     public Transaction(){
 
     }
@@ -32,6 +35,7 @@ public class Transaction {
         this.date = date;
     }
 
+    //----------------- Getters y Setters------------------//
     public Long getId(){ return id;}
 
     public TransactionType getType() {

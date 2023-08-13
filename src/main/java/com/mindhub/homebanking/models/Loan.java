@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 
 @Entity
 public class Loan {
+
+    //------------------- Propiedades ---------------------//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -34,7 +36,7 @@ public class Loan {
         this.payments = payments;
     }
 
-    //----------- Getters y Setters -------------------------------
+    //----------- Getters y Setters -------------------------------//
     public Long getId() {
         return id;
     }
@@ -67,6 +69,8 @@ public class Loan {
     public Set<ClientLoan> getClientLoans() {
         return clients;
     }
+
+    // ---------- Métodos ADD y Otros ----------------- //
 
     public void addClientLoans(ClientLoan clientLoan){
         clientLoan.setLoan(this);

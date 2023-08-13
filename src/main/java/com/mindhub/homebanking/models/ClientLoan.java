@@ -7,12 +7,15 @@ import javax.persistence.*;
 @Entity
 public class ClientLoan {
 
+    //------------------- Propiedades ---------------------//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
     private Double amount;
     private Integer payments;
+
+    // -------------------Relaciones----------------//
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
@@ -21,6 +24,7 @@ public class ClientLoan {
     @JoinColumn(name = "loan_id")
     private Loan loan;
 
+    // ---------------------Constructores -------------------//
     public ClientLoan(){
 
     }
@@ -32,6 +36,7 @@ public class ClientLoan {
         this.loan = loan;
     }
 
+    //----------------- Getters y Setters------------------//
     public Long getId(){
         return id;
     }
