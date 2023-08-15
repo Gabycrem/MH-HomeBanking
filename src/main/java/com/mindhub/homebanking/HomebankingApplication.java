@@ -156,7 +156,7 @@ public class HomebankingApplication {
 			card1.setType(CardType.DEBIT);
 			card1.setFromDate(LocalDate.now());
 			card1.setThruDate(LocalDate.now().plusYears(5));
-			card1.setNumber(2569654823584568l);
+			card1.setNumber("2569 6548 2358 4568");
 			card1.setCvv((short) 654);
 			//--Asignación a client y Save en Repo ---//
 			client1.addCard(card1);
@@ -169,7 +169,7 @@ public class HomebankingApplication {
 			card2.setType(CardType.CREDIT);
 			card2.setFromDate(LocalDate.now());
 			card2.setThruDate(LocalDate.now().plusYears(5));
-			card2.setNumber(456932157896541236l);
+			card2.setNumber("4569 3215 7896 5412");
 			card2.setCvv((short) 852);
 			//--Asignación a client y Save en Repo ---//
 			client1.addCard(card2);
@@ -182,7 +182,7 @@ public class HomebankingApplication {
 			card3.setType(CardType.CREDIT);
 			card3.setFromDate(LocalDate.now());
 			card3.setThruDate(LocalDate.now().plusYears(5));
-			card3.setNumber(4569945621581238l);
+			card3.setNumber("4569 9456 2158 1238");
 			card3.setCvv((short) 321);
 			//--Asignación a client y Save en Repo ---//
 			client2.addCard(card3);

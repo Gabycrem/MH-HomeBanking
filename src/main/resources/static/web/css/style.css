@@ -48,6 +48,11 @@
 .loan {
     background: linear-gradient(45deg, #ee09cf, #0026ff);
     color: white;
+    box-shadow: 1px 1px 5px black;
+}
+
+.loan:hover {
+    box-shadow: 2px 2px 10px black;
 }
 
 .menu-logo {
