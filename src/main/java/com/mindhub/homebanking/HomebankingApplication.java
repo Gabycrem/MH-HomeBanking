@@ -125,22 +125,22 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			//                  Créditos para Melba y segundo client               //
 			//---------------------------------------------------------------------//
-			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60, client1, loan1);
+			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60);
 			client1.addClientLoans(clientLoan1);
 			loan1.addClientLoans(clientLoan1);
 			clientLoanRepository.save(clientLoan1);
 
-			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12, client1, loan2);
+			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12);
 			loan2.addClientLoans(clientLoan2);
 			client1.addClientLoans(clientLoan2);
 			clientLoanRepository.save(clientLoan2);
 
-			ClientLoan clientLoan3 = new ClientLoan(100000.0, 24, client2, loan2);
+			ClientLoan clientLoan3 = new ClientLoan(100000.0, 24);
 			client2.addClientLoans(clientLoan3);
 			loan2.addClientLoans(clientLoan3);
 			clientLoanRepository.save(clientLoan3);
 
-			ClientLoan clientLoan4 = new ClientLoan(200000.0, 36, client2, loan3);
+			ClientLoan clientLoan4 = new ClientLoan(200000.0, 36);
 			loan3.addClientLoans(clientLoan4);
 			client2.addClientLoans(clientLoan4);
 			clientLoanRepository.save(clientLoan4);
@@ -151,7 +151,7 @@ public class HomebankingApplication {
 
 			//---------CARGA DE DATOS CARD1 ------------//
 			Card card1 = new Card();
-			card1.setCardHolder(client1.getFirstName().toUpperCase()+" "+client1.getLastName().toUpperCase());
+			card1.setCardHolder(client1.getFirstName()+" "+client1.getLastName());
 			card1.setColor(CardColor.GOLD);
 			card1.setType(CardType.DEBIT);
 			card1.setFromDate(LocalDate.now());
@@ -164,7 +164,7 @@ public class HomebankingApplication {
 
 			//---------CARGA DE DATOS CARD2 ------------//
 			Card card2 = new Card();
-			card2.setCardHolder(client1.getFirstName().toUpperCase()+" "+client1.getLastName().toUpperCase());
+			card2.setCardHolder(client1.getFirstName()+" "+client1.getLastName());
 			card2.setColor(CardColor.TITANIUM);
 			card2.setType(CardType.CREDIT);
 			card2.setFromDate(LocalDate.now());
@@ -177,7 +177,7 @@ public class HomebankingApplication {
 
 			//---------CARGA DE DATOS CARD3 ------------//
 			Card card3 = new Card();
-			card3.setCardHolder(client2.getFirstName().toUpperCase()+" "+client2.getLastName().toUpperCase());
+			card3.setCardHolder(client2.getFirstName()+" "+client2.getLastName());
 			card3.setColor(CardColor.SILVER);
 			card3.setType(CardType.CREDIT);
 			card3.setFromDate(LocalDate.now());
