@@ -26,11 +26,6 @@ public class WebAuthorization{
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/api/**", "/api/clients/current").hasAuthority("CLIENT");
 
-                /*.antMatchers("/web/**", "/h2-console/**","/api/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/clients", "/api/login").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/api/clients/current/cards/**").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/clients/current/cards", "/api/transactions", "/api/clients/current/accounts").permitAll()
-                .antMatchers("/api/clients/current/**").permitAll();*/
 
         http.formLogin()
                 .usernameParameter("email")
