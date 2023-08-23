@@ -12,6 +12,7 @@ import java.util.Set;
 @Entity
 public class Account {
 
+    //------------------- Propiedades ---------------------//
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
@@ -20,7 +21,7 @@ public class Account {
     private LocalDate creationDate;
     private Double balance;
 
-
+    // -------------------Relaciones----------------//
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private Client client;
@@ -28,8 +29,8 @@ public class Account {
     @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
     private Set<Transaction> transactions = new HashSet<>();
 
+    // ---------------------Constructores -------------------//
     public Account(){
-
     }
 
     public Account(String number, LocalDate creationDate, Double balance){
@@ -38,6 +39,7 @@ public class Account {
         this.balance = balance;
     }
 
+    //----------------- Getters y Setters------------------//
     public Long getId() {
         return id;
     }
@@ -78,6 +80,8 @@ public class Account {
     public Set<Transaction> getTransactions() {
         return transactions;
     }
+
+    // ---------- Métodos ADD y Otros ----------------- //
 
     public void addTransaction(Transaction transaction){
         transaction.setAccount(this);
