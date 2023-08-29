@@ -20,11 +20,10 @@ public class WebAuthorization{
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/api/login").permitAll()
+                .antMatchers(HttpMethod.POST,"/api/login","/api/clients").permitAll()
                 .antMatchers( "/web/index.html").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/clients").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ADMIN")
-                .antMatchers("/api/**", "/api/clients/current").hasAuthority("CLIENT");
+                .antMatchers("/admin/**", "/rest").hasAuthority("ADMIN")
+                .antMatchers( "/api/clients/current", "/api/clients/current/accounts").hasAuthority("CLIENT");
 
 
         http.formLogin()
@@ -32,7 +31,7 @@ public class WebAuthorization{
                 .passwordParameter("password")
                 .loginPage("/api/login");
 
-        http.logout().logoutUrl("/api/logout");
+        http.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID");
 
         http.csrf().disable();
 

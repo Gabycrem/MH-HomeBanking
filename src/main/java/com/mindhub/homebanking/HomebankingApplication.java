@@ -81,8 +81,8 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			client2.addAccount(account3);
 			client2.addAccount(account4);
-			client2.addAccount(account5);
-			client2.addAccount(account6);
+			//client2.addAccount(account5);
+			//client2.addAccount(account6);
 
 
 			//---------------------------------------------------------------------//
