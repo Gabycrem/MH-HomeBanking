@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.mindhub.homebanking.utilitis.Utils.getRandomAccountNumber;
+import static com.mindhub.homebanking.utils.Util.getRandomNumber;
 import static java.util.stream.Collectors.toList;
 
 @RestController
@@ -76,7 +76,7 @@ public class ClientController {
         Client newClient = new Client(firstName, lastName, email, passwordEncoder.encode(password));
         clientRepository.save(newClient);
 
-        Account account = new Account("VIN"+ getRandomAccountNumber(10000000,99999999), LocalDate.now(),0.0);
+        Account account = new Account("VIN"+ getRandomNumber(10000000,99999999), LocalDate.now(),0.0);
         newClient.addAccount(account);
         accountRepository.save(account);
 

@@ -6,7 +6,6 @@ import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 
 import com.mindhub.homebanking.repositories.ClientRepository;
-import com.mindhub.homebanking.utilitis.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Set;
 
+import static com.mindhub.homebanking.utils.Util.getRandomNumber;
 import static java.util.stream.Collectors.toSet;
 
 @RestController
@@ -45,7 +45,12 @@ public class AccountController {
             return new ResponseEntity<>("The maximum number of accounts is 3.", HttpStatus.FORBIDDEN);
         }
 
-        Account account = new Account("VIN"+ Utils.getRandomAccountNumber(10000000,99999999), LocalDate.now(),0.0);
+        String numberAccount;
+        do{
+            numberAccount = "VIN"+getRandomNumber(10000000,99999999);
+        } while (accountRepository.existsByNumber(numberAccount));
+
+        Account account = new Account(numberAccount, LocalDate.now(),0.0);
         client.addAccount(account);
         accountRepository.save(account);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
