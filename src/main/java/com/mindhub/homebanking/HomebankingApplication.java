@@ -81,8 +81,8 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			client2.addAccount(account3);
 			client2.addAccount(account4);
-			client2.addAccount(account5);
-			client2.addAccount(account6);
+			//client2.addAccount(account5);
+			//client2.addAccount(account6);
 
 
 			//---------------------------------------------------------------------//
@@ -162,7 +162,7 @@ public class HomebankingApplication {
 			card1.setFromDate(LocalDate.now());
 			card1.setThruDate(LocalDate.now().plusYears(5));
 			card1.setNumber("2569 6548 2358 4568");
-			card1.setCvv((short) 654);
+			card1.setCvv( 654);
 			//--Asignación a client y Save en Repo ---//
 			client1.addCard(card1);
 			cardRepository.save(card1);
@@ -175,7 +175,7 @@ public class HomebankingApplication {
 			card2.setFromDate(LocalDate.now());
 			card2.setThruDate(LocalDate.now().plusYears(5));
 			card2.setNumber("4569 3215 7896 5412");
-			card2.setCvv((short) 852);
+			card2.setCvv( 852);
 			//--Asignación a client y Save en Repo ---//
 			client1.addCard(card2);
 			cardRepository.save(card2);
@@ -188,7 +188,7 @@ public class HomebankingApplication {
 			card3.setFromDate(LocalDate.now());
 			card3.setThruDate(LocalDate.now().plusYears(5));
 			card3.setNumber("4569 9456 2158 1238");
-			card3.setCvv((short) 321);
+			card3.setCvv( 321);
 			//--Asignación a client y Save en Repo ---//
 			client2.addCard(card3);
 			cardRepository.save(card3);
