@@ -7,6 +7,7 @@ import com.mindhub.homebanking.repositories.AccountRepository;
 
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
     @Autowired
-    private ClientRepository clientRepository;
+    private ClientService clientService;
 
 
     @GetMapping("/accounts")
@@ -48,14 +49,14 @@ public class AccountController {
 
     @GetMapping("/clients/current/accounts")
     public Set<AccountDTO> getClientCurrentAccounts(Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.getClientByEmail(authentication.getName());
         return client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toSet());
     }
 
     // -----------  CREACION DE NUEVA CUENTA DE CLIENTE LOGUEADO ----------------------//
     @PostMapping("/clients/current/accounts")
     public ResponseEntity<Object> createAccount(Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
+        Client client = clientService.getClientByEmail(authentication.getName());
         if (client.getAccounts().size() >= 3){
             return new ResponseEntity<>("The maximum number of accounts is 3.", HttpStatus.FORBIDDEN);
         }

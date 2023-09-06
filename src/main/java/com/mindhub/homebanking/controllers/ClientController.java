@@ -35,7 +35,6 @@ public class ClientController {
     private PasswordEncoder passwordEncoder;
 
 
-
     @GetMapping("/clients")
     public List<ClientDTO> getClients(){
         return clientService.getClientsDto();
@@ -44,7 +43,6 @@ public class ClientController {
     public ClientDTO getClientCurrent(Authentication authentication){
         return new ClientDTO(clientService.getClientCurrent(authentication));
     }
-
 
     @PostMapping("/clients")
     public ResponseEntity<Object> register(
@@ -80,10 +78,6 @@ public class ClientController {
         newClient.addAccount(account);
         accountService.saveAccount(account);
 
-
         return new ResponseEntity<>(HttpStatus.CREATED);
-
     }
-
-
 }
