@@ -6,6 +6,7 @@ import com.mindhub.homebanking.models.Client;
 import com.mindhub.homebanking.repositories.AccountRepository;
 
 import com.mindhub.homebanking.repositories.ClientRepository;
+import com.mindhub.homebanking.services.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,25 +23,28 @@ import static java.util.stream.Collectors.toSet;
 @RequestMapping("/api")
 public class AccountController {
     @Autowired
-    private AccountRepository accountRepository;
+    private AccountService accountService;
     @Autowired
     private ClientRepository clientRepository;
 
 
     @GetMapping("/accounts")
     public Set<AccountDTO> getAccounts() {
-        return accountRepository.findAll().stream().map(account -> new AccountDTO(account)).collect(toSet());
+        return accountService.getAccountsDto();
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id, Authentication authentication){
+    public AccountDTO getAccount(@PathVariable Long id) {
+        return accountService.getAccountDtoById(id);
+    }
+    /*public AccountDTO getAccount(@PathVariable Long id, Authentication authentication){
         Client client = clientRepository.findByEmail(authentication.getName());
         Account accountId = accountRepository.findById(id).orElse(null);
         if (client.getAccounts().contains(accountId)){
             return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
         }
         return new AccountDTO(null);
-    }
+    }*/
 
     @GetMapping("/clients/current/accounts")
     public Set<AccountDTO> getClientCurrentAccounts(Authentication authentication){
@@ -59,11 +63,11 @@ public class AccountController {
         String numberAccount;
         do{
             numberAccount = "VIN"+getRandomNumber(10000000,99999999);
-        } while (accountRepository.existsByNumber(numberAccount));
+        } while (accountService.existsByNumber(numberAccount));
 
         Account account = new Account(numberAccount, LocalDate.now(),0.0);
         client.addAccount(account);
-        accountRepository.save(account);
+        accountService.saveAccount(account);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);
     }
 
