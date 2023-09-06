@@ -38,4 +38,8 @@ public class AccountServiceImplement implements AccountService {
         accountRepository.save(account);
     }
 
+    public Account getAccountByNumber(String number){
+        return accountRepository.getAccountByNumber(number);
+    }
+
 }

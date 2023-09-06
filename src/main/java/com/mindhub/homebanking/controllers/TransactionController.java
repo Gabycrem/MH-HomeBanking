@@ -8,6 +8,9 @@ import com.mindhub.homebanking.models.TransactionType;
 import com.mindhub.homebanking.repositories.AccountRepository;
 import com.mindhub.homebanking.repositories.ClientRepository;
 import com.mindhub.homebanking.repositories.TransactionRepository;
+import com.mindhub.homebanking.services.AccountService;
+import com.mindhub.homebanking.services.ClientService;
+import com.mindhub.homebanking.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +27,21 @@ import java.util.stream.Collectors;
 public class TransactionController {
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    private ClientService clientService;
     @Autowired
-    private ClientRepository clientRepository;
+    private AccountService accountService;
     @Autowired
-    private AccountRepository accountRepository;
+    private TransactionService transactionService;
+
 
     @GetMapping("/transaction")
     public Set<TransactionDTO> getTransactions(){
-        return transactionRepository.findAll().stream().map(transaction -> new TransactionDTO(transaction)).collect(Collectors.toSet());
+        return transactionService.getTransactions();
     }
 
     @GetMapping("/transaction/{id}")
     public TransactionDTO getTransaction(@PathVariable Long id){
-        return new TransactionDTO(transactionRepository.findById(id).orElse(null));
+        return new TransactionDTO(transactionService.findById(id));
     }
 
 
@@ -49,9 +53,9 @@ public class TransactionController {
                                                     @RequestParam String toAccountNumber,
                                                     Authentication authentication){
 
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account accountSource = accountRepository.getAccountByNumber(fromAccountNumber);
-        Account accountDestination = accountRepository.getAccountByNumber(toAccountNumber);
+        Client client = clientService.getClientByEmail(authentication.getName());
+        Account accountSource = accountService.getAccountByNumber(fromAccountNumber);
+        Account accountDestination = accountService.getAccountByNumber(toAccountNumber);
 
         // --------------------- Validando que no haya campos vacios -------------------------------//
         if (amount == null){
@@ -67,7 +71,7 @@ public class TransactionController {
             return new ResponseEntity<>("Destination Account is required", HttpStatus.FORBIDDEN);
         }
         //  ------------- Validando que la cuenta de Origen Exista  ---------------------------------------//
-        if (!accountRepository.existsByNumber(fromAccountNumber)){
+        if (!accountService.existsByNumber(fromAccountNumber)){
             return new ResponseEntity<>("The source account does not exist", HttpStatus.FORBIDDEN);
         }
 
@@ -77,7 +81,7 @@ public class TransactionController {
         }
 
         //  ------------- Validando que la cuenta de Destino Exista  ---------------------------------------//
-        if (!accountRepository.existsByNumber(toAccountNumber)){
+        if (!accountService.existsByNumber(toAccountNumber)){
             return new ResponseEntity<>("The destination account does not exist", HttpStatus.FORBIDDEN);
         }
 
@@ -95,15 +99,15 @@ public class TransactionController {
         Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount, description, LocalDateTime.now());
         accountSource.addTransaction(debitTransaction);
         accountSource.setBalance(accountSource.getBalance() - amount);
-        transactionRepository.save(debitTransaction);
-        accountRepository.save(accountSource);
+        transactionService.saveTransaction(debitTransaction);
+        accountService.saveAccount(accountSource);
 
         //  ------------------------------ Acreditando a la cuenta de Destino ------------------------------//
         Transaction creditTransaction = new Transaction(TransactionType.CREDIT, amount, description, LocalDateTime.now());
         accountDestination.addTransaction(creditTransaction);
         accountDestination.setBalance(accountDestination.getBalance() +  amount);
-        transactionRepository.save(creditTransaction);
-        accountRepository.save(accountDestination);
+        transactionService.saveTransaction(creditTransaction);
+        accountService.saveAccount(accountDestination);
         return new ResponseEntity<>("Succesful transaction", HttpStatus.CREATED);
     }
 }

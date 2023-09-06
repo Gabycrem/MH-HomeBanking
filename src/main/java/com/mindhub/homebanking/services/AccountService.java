@@ -11,6 +11,6 @@ public interface AccountService {
     Set<AccountDTO> getAccountsDto();
     AccountDTO getAccountDtoById(Long id);
     boolean existsByNumber(String number);
-
     void saveAccount(Account account);
+    Account getAccountByNumber(String number);
 }
