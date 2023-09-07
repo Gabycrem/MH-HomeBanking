@@ -38,14 +38,6 @@ public class AccountController {
     public AccountDTO getAccount(@PathVariable Long id) {
         return accountService.getAccountDtoById(id);
     }
-    /*public AccountDTO getAccount(@PathVariable Long id, Authentication authentication){
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account accountId = accountRepository.findById(id).orElse(null);
-        if (client.getAccounts().contains(accountId)){
-            return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
-        }
-        return new AccountDTO(null);
-    }*/
 
     @GetMapping("/clients/current/accounts")
     public Set<AccountDTO> getClientCurrentAccounts(Authentication authentication){
