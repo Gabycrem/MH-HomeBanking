@@ -19,14 +19,14 @@ import java.util.Locale;
 @SpringBootApplication
 public class HomebankingApplication {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    /*@Autowired
+    private PasswordEncoder passwordEncoder;*/
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomebankingApplication.class, args);
 	}
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner initData(ClientRepository clientRepository, AccountRepository accountRepository,
 									  TransactionRepository transactionRepository, LoanRepository loanRepository,
 									  ClientLoanRepository clientLoanRepository, CardRepository cardRepository){
@@ -193,6 +193,6 @@ public class HomebankingApplication {
 			client2.addCard(card3);
 			cardRepository.save(card3);
 		});
-	}
+	}*/
 
 }
