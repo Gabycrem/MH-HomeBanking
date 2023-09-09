@@ -1,5 +1,6 @@
 package com.mindhub.homebanking.controllers;
 
+import com.mindhub.homebanking.dtos.AccountDTO;
 import com.mindhub.homebanking.dtos.ClientDTO;
 import com.mindhub.homebanking.models.Account;
 import com.mindhub.homebanking.models.Client;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static com.mindhub.homebanking.utils.Util.getRandomNumber;
 import static java.util.stream.Collectors.toList;
@@ -35,6 +37,8 @@ public class ClientController {
     public ClientDTO getClientCurrent(Authentication authentication){
         return new ClientDTO(clientRepository.findByEmail(authentication.getName()));
     }
+
+
 
     @GetMapping("/clients")
     public List<ClientDTO> getClients(){

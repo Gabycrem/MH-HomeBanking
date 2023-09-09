@@ -33,8 +33,19 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id){
-        return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
+    public AccountDTO getAccount(@PathVariable Long id, Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        Account accountId = accountRepository.findById(id).orElse(null);
+        if (client.getAccounts().contains(accountId)){
+            return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
+        }
+        return new AccountDTO(null);
+    }
+
+    @GetMapping("/clients/current/accounts")
+    public Set<AccountDTO> getClientCurrentAccounts(Authentication authentication){
+        Client client = clientRepository.findByEmail(authentication.getName());
+        return client.getAccounts().stream().map(account -> new AccountDTO(account)).collect(toSet());
     }
 
     // -----------  CREACION DE NUEVA CUENTA DE CLIENTE LOGUEADO ----------------------//
