@@ -56,6 +56,8 @@ public class TransactionController {
         // --------------------- Validando que no haya campos vacios -------------------------------//
         if (amount == null){
             return new ResponseEntity<>("Amount is required", HttpStatus.FORBIDDEN);
+        } else if ( amount <= 0){ //Agregando validación de monto en 0 o negativo
+            return new ResponseEntity<>("Amount must be greater than 0", HttpStatus.FORBIDDEN);
         }
         if (description.isEmpty()){
             return new ResponseEntity<>("Description is required", HttpStatus.FORBIDDEN);
