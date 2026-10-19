@@ -1,18 +1,16 @@
 package com.mindhub.homebanking.models;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 @Entity
 public class ClientLoan {
 
     //------------------- Propiedades ---------------------//
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double amount;
+    private BigDecimal amount;
     private Integer payments;
 
     // -------------------Relaciones----------------//
@@ -29,7 +27,7 @@ public class ClientLoan {
 
     }
 
-    public ClientLoan(Double amount, Integer payments){
+    public ClientLoan(BigDecimal amount, Integer payments){
         this.amount = amount;
         this.payments = payments;
 
@@ -40,11 +38,11 @@ public class ClientLoan {
         return id;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

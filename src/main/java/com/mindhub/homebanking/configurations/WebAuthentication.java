@@ -6,22 +6,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
+public class WebAuthentication {
 
     @Autowired
     private ClientRepository clientRepository;
 
-    @Override
-    public void init(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(email -> {
+    @Bean
+    public UserDetailsService userDetailsService(){
+        return email -> {
             Client client = clientRepository.findByEmail(email);
             if (client != null){
                 //acá podemos filtrar por alguna propiedad y asignar algunos roles admin por ej
@@ -34,7 +34,7 @@ public class WebAuthentication extends GlobalAuthenticationConfigurerAdapter {
             } else {
                 throw new UsernameNotFoundException("Unknow user: "+email);
             }
-        });
+        };
     }
 
     @Bean

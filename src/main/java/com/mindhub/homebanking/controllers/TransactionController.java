@@ -14,8 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,67 +44,76 @@ public class TransactionController {
 
     @Transactional
     @PostMapping("/transactions")
-    public ResponseEntity<Object> createTransaction(@RequestParam Double amount,
+    public ResponseEntity<Object> createTransaction(@RequestParam BigDecimal amount,
                                                     @RequestParam String description,
                                                     @RequestParam String fromAccountNumber,
                                                     @RequestParam String toAccountNumber,
                                                     Authentication authentication){
 
-        Client client = clientRepository.findByEmail(authentication.getName());
-        Account accountSource = accountRepository.getAccountByNumber(fromAccountNumber);
-        Account accountDestination = accountRepository.getAccountByNumber(toAccountNumber);
-
         // --------------------- Validando que no haya campos vacios -------------------------------//
         if (amount == null){
             return new ResponseEntity<>("Amount is required", HttpStatus.FORBIDDEN);
-        } else if ( amount <= 0){ //Agregando validación de monto en 0 o negativo
+        } else if (amount.signum() <= 0){ //Agregando validación de monto en 0 o negativo
             return new ResponseEntity<>("Amount must be greater than 0", HttpStatus.FORBIDDEN);
         }
-        if (description.isEmpty()){
+        if (description == null || description.isBlank()){
             return new ResponseEntity<>("Description is required", HttpStatus.FORBIDDEN);
         }
-        if (fromAccountNumber.isEmpty()){
+        if (fromAccountNumber == null || fromAccountNumber.isBlank()){
             return new ResponseEntity<>("Soruce Account is required", HttpStatus.FORBIDDEN);
         }
-        if (toAccountNumber.isEmpty()){
+        if (toAccountNumber == null || toAccountNumber.isBlank()){
             return new ResponseEntity<>("Destination Account is required", HttpStatus.FORBIDDEN);
+        }
+        if (fromAccountNumber.equals(toAccountNumber)){
+            return new ResponseEntity<>("The destination account cannot be the source account", HttpStatus.FORBIDDEN);
         }
         //  ------------- Validando que la cuenta de Origen Exista  ---------------------------------------//
         if (!accountRepository.existsByNumber(fromAccountNumber)){
             return new ResponseEntity<>("The source account does not exist", HttpStatus.FORBIDDEN);
         }
 
-        //  ------------- Validando que la cuenta de Origen pertenezca al Cliente Autenticado ----------//
-        if (!client.getAccounts().contains(accountSource)){
-            return new ResponseEntity<>("The source account does not belong to the authenticated client", HttpStatus.FORBIDDEN);
-        }
-
-        //  ------------- Validando que la cuenta de Destino Exista  ---------------------------------------//
         if (!accountRepository.existsByNumber(toAccountNumber)){
             return new ResponseEntity<>("The destination account does not exist", HttpStatus.FORBIDDEN);
         }
 
-        //  ------------- Validando que la cuenta de Origen sea diferente a la de Destino --------------//
-        if (fromAccountNumber.equals(toAccountNumber)){
-            return new ResponseEntity<>("The destination account cannot be the source account", HttpStatus.FORBIDDEN);
+        //  ------------- Validando que la cuenta de Origen pertenezca al Cliente Autenticado ----------//
+        Client client = clientRepository.findByEmail(authentication.getName());
+        Account accountSource;
+        Account accountDestination;
+        // Always lock accounts in the same order to reduce deadlocks when two transfers cross.
+        if (fromAccountNumber.compareTo(toAccountNumber) < 0) {
+            accountSource = accountRepository.getAccountByNumber(fromAccountNumber);
+            accountDestination = accountRepository.getAccountByNumber(toAccountNumber);
+        } else {
+            accountDestination = accountRepository.getAccountByNumber(toAccountNumber);
+            accountSource = accountRepository.getAccountByNumber(fromAccountNumber);
+        }
+
+        if (client == null || accountSource == null || accountDestination == null) {
+            return new ResponseEntity<>("The requested account or client does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if (client.getAccounts().stream().noneMatch(account -> account.getId() == accountSource.getId())){
+            return new ResponseEntity<>("The source account does not belong to the authenticated client", HttpStatus.FORBIDDEN);
         }
 
         //  ------------- Validando que la cuenta de Origen Tenga fondos suficientes ---------------------//
-        if (amount > accountSource.getBalance()){
+        if (amount.compareTo(accountSource.getBalance()) > 0){
             return new ResponseEntity<>("Insufficient funds", HttpStatus.FORBIDDEN);
         }
 
         //  ------------------------------ Debitando de la cuenta de Origen ------------------------------//
-        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, -amount, description, LocalDateTime.now());
+        Transaction debitTransaction = new Transaction(TransactionType.DEBIT, amount.negate(), description, LocalDateTime.now());
         accountSource.addTransaction(debitTransaction);
-        accountSource.setBalance(accountSource.getBalance() - amount);
+        accountSource.setBalance(accountSource.getBalance().subtract(amount));
         transactionRepository.save(debitTransaction);
         accountRepository.save(accountSource);
 
         //  ------------------------------ Acreditando a la cuenta de Destino ------------------------------//
         Transaction creditTransaction = new Transaction(TransactionType.CREDIT, amount, description, LocalDateTime.now());
         accountDestination.addTransaction(creditTransaction);
-        accountDestination.setBalance(accountDestination.getBalance() +  amount);
+        accountDestination.setBalance(accountDestination.getBalance().add(amount));
         transactionRepository.save(creditTransaction);
         accountRepository.save(accountDestination);
         return new ResponseEntity<>("Succesful transaction", HttpStatus.CREATED);

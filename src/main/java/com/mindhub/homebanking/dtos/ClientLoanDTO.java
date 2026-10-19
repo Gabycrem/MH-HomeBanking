@@ -1,13 +1,14 @@
 package com.mindhub.homebanking.dtos;
 
 import com.mindhub.homebanking.models.ClientLoan;
+import java.math.BigDecimal;
 
 public class ClientLoanDTO{
 
     private Long id;
     private Long loanId;
     private String name;
-    private Double amount;
+    private BigDecimal amount;
     private Integer payments;
 
     public ClientLoanDTO(ClientLoan clientLoan){
@@ -31,7 +32,7 @@ public class ClientLoanDTO{
         return loanId;
     }
 
-    public Double getAmount(){
+    public BigDecimal getAmount(){
         return amount;
     }
 

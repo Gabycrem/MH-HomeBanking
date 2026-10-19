@@ -13,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.Set;
 
 import static com.mindhub.homebanking.utils.Util.getRandomNumber;
@@ -33,13 +34,23 @@ public class AccountController {
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDTO getAccount(@PathVariable Long id, Authentication authentication){
+    public ResponseEntity<?> getAccount(@PathVariable Long id, Authentication authentication){
         Client client = clientRepository.findByEmail(authentication.getName());
-        Account accountId = accountRepository.findById(id).orElse(null);
-        if (client.getAccounts().contains(accountId)){
-            return accountRepository.findById(id).map(account -> new AccountDTO(account)).orElse(null);
+        Account account = accountRepository.findById(id).orElse(null);
+
+        if (account == null) {
+            return new ResponseEntity<>("Account not found", HttpStatus.NOT_FOUND);
         }
-        return new AccountDTO(null);
+
+        // Compare identifiers, not entity object identity. Repository calls may return
+        // detached instances from different persistence contexts.
+        boolean belongsToClient = client != null && client.getAccounts().stream()
+                .anyMatch(clientAccount -> clientAccount.getId() == account.getId());
+        if (!belongsToClient) {
+            return new ResponseEntity<>("The account does not belong to the authenticated client", HttpStatus.FORBIDDEN);
+        }
+
+        return ResponseEntity.ok(new AccountDTO(account));
     }
 
     @GetMapping("/clients/current/accounts")
@@ -61,7 +72,7 @@ public class AccountController {
             numberAccount = "VIN"+getRandomNumber(10000000,99999999);
         } while (accountRepository.existsByNumber(numberAccount));
 
-        Account account = new Account(numberAccount, LocalDate.now(),0.0);
+        Account account = new Account(numberAccount, LocalDate.now(), BigDecimal.ZERO);
         client.addAccount(account);
         accountRepository.save(account);
         return new ResponseEntity<>("Account created successfully", HttpStatus.CREATED);

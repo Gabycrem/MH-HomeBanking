@@ -1,8 +1,7 @@
 package com.mindhub.homebanking.models;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -11,11 +10,10 @@ public class Loan {
 
     //------------------- Propiedades ---------------------//
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private Double maxAmount;
+    private BigDecimal maxAmount;
     @ElementCollection
     @Column(name = "payment")
     private List<Integer> payments = new ArrayList<>();
@@ -30,7 +28,7 @@ public class Loan {
 
     }
 
-    public Loan(String name, Double maxAmount, List<Integer> payments){
+    public Loan(String name, BigDecimal maxAmount, List<Integer> payments){
         this.name = name;
         this.maxAmount = maxAmount;
         this.payments = payments;
@@ -50,11 +48,11 @@ public class Loan {
         this.name = name;
     }
 
-    public Double getMaxAmount() {
+    public BigDecimal getMaxAmount() {
         return maxAmount;
     }
 
-    public void setMaxAmount(Double maxAmount) {
+    public void setMaxAmount(BigDecimal maxAmount) {
         this.maxAmount = maxAmount;
     }
 
