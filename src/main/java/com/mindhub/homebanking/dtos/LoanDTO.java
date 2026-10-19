@@ -3,6 +3,7 @@ package com.mindhub.homebanking.dtos;
 import com.mindhub.homebanking.models.Loan;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class LoanDTO {
@@ -19,7 +20,7 @@ public class LoanDTO {
         this.id = loan.getId();
         this.name = loan.getName();
         this.maxAmount = loan.getMaxAmount();
-        this.payments = loan.getPayments();
+        this.payments = new ArrayList<>(loan.getPayments());
     }
 
     public Long getId() {

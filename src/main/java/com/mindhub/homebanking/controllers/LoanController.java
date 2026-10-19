@@ -55,6 +55,7 @@ public class LoanController {
     }
 
     @GetMapping("/loans")
+    @Transactional(readOnly = true)
     public List<LoanDTO> getLoans() {
         return loanRepository.findAll().stream()
                 .map(LoanDTO::new)

@@ -97,6 +97,12 @@ class HomebankingApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.loans").isArray())
 				.andExpect(jsonPath("$.loans.length()").value(2));
+
+		mockMvc.perform(get("/api/loans")
+				.session((MockHttpSession) login.getRequest().getSession()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$[0].name").exists())
+			.andExpect(jsonPath("$[0].payments").isArray());
 	}
 
 	@Test
