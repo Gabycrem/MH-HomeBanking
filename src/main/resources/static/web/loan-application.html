@@ -99,12 +99,63 @@
                     </div>
                     <div class="row mt-4">
                         <div class="col">
-                            <p class="small text-muted">This academic version displays assigned loans. The backend
-                                also exposes loan listing and application endpoints; this view is read-only.</p>
+                            <h2 class="display-6 subtitle">Apply for a loan</h2>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="loanType" class="form-label">Loan type</label>
+                                    <select id="loanType" v-model="loanTypeId" v-on:change="changedType" class="form-select">
+                                        <option value="0">Select a loan</option>
+                                        <option v-for="loan in loanTypes" v-bind:value="loan.id">{{ loan.name }} | max ${{ loan.maxAmount }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="payments" class="form-label">Payments</label>
+                                    <select id="payments" v-model="payments" class="form-select">
+                                        <option value="0">Select</option>
+                                        <option v-for="option in paymentsList" v-bind:value="option">{{ option }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="amount" class="form-label">Amount</label>
+                                    <input id="amount" v-model="amount" type="number" min="1" class="form-control">
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <label for="accountToNumber" class="form-label">Deposit account</label>
+                                    <select id="accountToNumber" v-model="accountToNumber" class="form-select">
+                                        <option value="VIN">Select an account</option>
+                                        <option v-for="account in clientAccounts" v-bind:value="account.number">{{ account.number }}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end gap-2">
+                                    <button type="button" v-on:click="checkFees" class="btn btn-outline-primary">See fees</button>
+                                    <button type="button" v-on:click="apply" class="btn btn-success">Apply</button>
+                                </div>
+                            </div>
+                            <p class="small text-muted mt-3">Applications are academic demonstrations and are credited immediately.</p>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="modal fade" id="okModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog"><div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Application complete</h5></div>
+                <div class="modal-body">The loan has been applied successfully.</div>
+                <div class="modal-footer"><button type="button" v-on:click="finish" class="btn btn-success">OK</button></div>
+            </div></div>
+        </div>
+        <div class="modal fade" id="feesModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog"><div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Estimated fees</h5></div>
+                <div class="modal-body">
+                    <p>Total debt: ${{ totalLoan.toFixed(2) }}</p>
+                    <ol class="list-group list-group-numbered"><li v-for="fee in fees" class="list-group-item">${{ fee.amount }}</li></ol>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button></div>
+            </div></div>
         </div>
     </div>
 

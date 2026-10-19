@@ -90,7 +90,7 @@ class HomebankingApplicationTests {
 
 		mockMvc.perform(get("/web/loan-application.html"))
 				.andExpect(status().isOk())
-				.andExpect(content().string(org.hamcrest.Matchers.containsString("displays assigned loans")));
+			.andExpect(content().string(org.hamcrest.Matchers.containsString("Apply for a loan")));
 
 		mockMvc.perform(get("/api/clients/current")
 				.session((MockHttpSession) login.getRequest().getSession()))

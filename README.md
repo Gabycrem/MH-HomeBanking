@@ -13,7 +13,7 @@ Aplicación académica de home banking desarrollada con Java y Spring. El proyec
 - Creación de nuevas cuentas.
 - Transferencias entre cuentas, con validación de titularidad, saldo y monto.
 - Consulta y creación de tarjetas de débito y crédito.
-- Consulta de préstamos asignados al cliente.
+- Consulta y solicitud académica de préstamos, con acreditación inmediata en una cuenta propia.
 - Endpoints REST para clientes, cuentas, tarjetas, préstamos y transacciones.
 - Consola H2 disponible para inspección local con permisos restringidos.
 
@@ -27,13 +27,14 @@ Aplicación académica de home banking desarrollada con Java y Spring. El proyec
 - Spring Data REST.
 - Spring Security 6, con autenticación basada en sesión.
 - H2 en memoria.
+- PostgreSQL opcional mediante el perfil `postgres`.
 - Gradle Wrapper 8.14.3.
 
 ### Frontend
 
 El frontend está compuesto por páginas HTML, JavaScript, Vue, Axios, Bootstrap y Bootstrap Icons. Utiliza llamadas relativas a `/api`, por lo que se sirve desde la misma aplicación Spring Boot.
 
-La interfaz base fue provista como parte de la formación académica de MindHub; no se presenta como un desarrollo original de este repositorio. Se conservaron su estructura visual y sus funcionalidades, y se agregó la vista de préstamos faltante siguiendo el estilo de las demás pantallas.
+La interfaz base fue provista como parte de la formación académica de MindHub; no se presenta como un desarrollo original de este repositorio. Se conservaron su estructura visual y sus funcionalidades, y se completó la vista de préstamos siguiendo el estilo de las demás pantallas.
 
 No se encontró un archivo `LICENSE` en el repositorio. Antes de reutilizar la interfaz fuera de este contexto, conviene confirmar con la academia las condiciones de uso de sus recursos gráficos, marca e interfaz.
 
@@ -50,6 +51,15 @@ java -version
 ```
 
 La versión debe ser 21 o compatible con el toolchain configurado en `build.gradle`.
+
+Por defecto se utiliza H2 en memoria. Para usar PostgreSQL, crear una base vacía y ejecutar con variables de entorno:
+
+```powershell
+$env:DB_URL = "jdbc:postgresql://localhost:5432/homebanking"
+$env:DB_USERNAME = "homebankingapp"
+$env:DB_PASSWORD = "tu-clave-local"
+./gradlew.bat bootRun --args="--spring.profiles.active=postgres"
+```
 
 ## Ejecutar desde IntelliJ IDEA
 
@@ -101,7 +111,7 @@ Son credenciales ficticias incluidas únicamente para la demostración local. No
 4. Ir a transferencias y enviar un importe válido desde una cuenta propia hacia otra cuenta.
 5. Confirmar que el saldo y los movimientos se actualicen.
 6. Revisar las tarjetas existentes y crear una tarjeta nueva.
-7. Abrir la sección Loans para consultar los préstamos asignados.
+7. Abrir la sección Loans para consultar préstamos asignados, simular cuotas y solicitar un préstamo académico.
 8. Cerrar sesión y comprobar que las páginas protegidas soliciten autenticación.
 
 Al reiniciar la aplicación, H2 se recrea desde cero (`create-drop`) y se vuelve a cargar el conjunto de datos ficticios. Los cambios hechos durante una ejecución no son persistentes.
@@ -160,6 +170,8 @@ También se realizaron estos ajustes:
 - Validaciones para evitar montos inválidos, cuentas inexistentes o transferencias no autorizadas.
 - Incorporación de pruebas de contexto, autenticación, autorización, movimientos, transferencias y préstamos.
 - Incorporación de `loan-application.html` y su JavaScript porque los enlaces existentes apuntaban a una vista que no estaba en el repositorio.
+- Recuperación de la capa de servicios de las Tasks 9–11 y de la solicitud de préstamos con validación de cuenta propia.
+- Adaptación de la generación de números de tarjeta para conservar siempre cuatro bloques de cuatro dígitos.
 
 La actualización conserva el enfoque original: una aplicación monolítica Spring Boot con frontend estático integrado. No se reemplazó el framework ni se convirtió el proyecto en una aplicación bancaria real.
 
@@ -176,6 +188,7 @@ Las pruebas cubren el arranque del contexto, el login, la autorización de cuent
 ## Limitaciones conocidas
 
 - H2 es una base en memoria: los datos se pierden al reiniciar.
+- El perfil PostgreSQL es opcional; requiere una instancia administrada por el usuario y no incluye credenciales reales.
 - Los datos iniciales y las credenciales son fijos y están pensados para una demo.
 - La aplicación no incluye recuperación de contraseña, MFA, auditoría, notificaciones ni integración con entidades financieras.
 - La protección CSRF está deshabilitada para mantener el funcionamiento del frontend académico basado en sesión; esto debe rediseñarse antes de cualquier uso real.
