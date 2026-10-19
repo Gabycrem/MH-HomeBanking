@@ -37,6 +37,30 @@ La interfaz base fue provista como parte de la formación académica de MindHub;
 
 No se encontró un archivo `LICENSE` en el repositorio. Antes de reutilizar la interfaz fuera de este contexto, conviene confirmar con la academia las condiciones de uso de sus recursos gráficos, marca e interfaz.
 
+## Capturas de la aplicación
+
+Las siguientes capturas corresponden a la versión actual ejecutada localmente con los datos ficticios de demostración. No contienen información bancaria real.
+
+### Inicio de sesión
+
+![Pantalla de inicio de sesión](src/main/resources/static/web/img/screenshot-login.png)
+
+### Cuentas y préstamos
+
+![Vista de cuentas y préstamos](src/main/resources/static/web/img/screenshot-accounts.png)
+
+### Tarjetas
+
+![Vista de tarjetas](src/main/resources/static/web/img/screenshot-cards.png)
+
+### Transferencias
+
+![Vista de transferencias](src/main/resources/static/web/img/screenshot-transfers.png)
+
+### Préstamos
+
+![Vista de préstamos](src/main/resources/static/web/img/screenshot-loans.png)
+
 ## Requisitos para Windows
 
 - JDK 21 instalado y disponible en `PATH`.
