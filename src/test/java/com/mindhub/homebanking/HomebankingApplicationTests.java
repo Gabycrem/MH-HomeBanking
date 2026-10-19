@@ -8,8 +8,6 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -22,9 +20,6 @@ class HomebankingApplicationTests {
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	@Autowired
-	private com.mindhub.homebanking.repositories.AccountRepository accountRepository;
 
 	@Test
 	void contextLoads() {
@@ -47,8 +42,10 @@ class HomebankingApplicationTests {
 				.param("toAccountNumber", "VIN003"))
 				.andExpect(status().isCreated());
 
-		assertThat(accountRepository.getAccountByNumber("VIN001").getBalance()).isEqualByComparingTo("4899.75");
-		assertThat(accountRepository.getAccountByNumber("VIN003").getBalance()).isEqualByComparingTo("2600.25");
+		mockMvc.perform(get("/api/accounts/1")
+				.session((MockHttpSession) login.getRequest().getSession()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.balance").value(4899.75));
 	}
 
 	@Test
@@ -100,6 +97,44 @@ class HomebankingApplicationTests {
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.loans").isArray())
 				.andExpect(jsonPath("$.loans.length()").value(2));
+	}
+
+	@Test
+	@Transactional
+	void authenticatedClientCanApplyForLoanIntoOwnAccount() throws Exception {
+		MvcResult login = mockMvc.perform(post("/api/login")
+				.param("email", "melba@mindhub.com")
+				.param("password", "123456"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockMvc.perform(post("/api/loans")
+				.session((MockHttpSession) login.getRequest().getSession())
+				.contentType("application/json")
+				.content("{\"loanId\":1,\"amount\":1000,\"payments\":12,\"toAccountNumber\":\"VIN001\"}"))
+				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.name").value("Hipotecario"))
+				.andExpect(jsonPath("$.amount").value(1200));
+
+		mockMvc.perform(get("/api/accounts/1")
+				.session((MockHttpSession) login.getRequest().getSession()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.balance").value(6000));
+	}
+
+	@Test
+	void clientCannotApplyForLoanIntoAnotherClientsAccount() throws Exception {
+		MvcResult login = mockMvc.perform(post("/api/login")
+				.param("email", "melba@mindhub.com")
+				.param("password", "123456"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		mockMvc.perform(post("/api/loans")
+				.session((MockHttpSession) login.getRequest().getSession())
+				.contentType("application/json")
+				.content("{\"loanId\":1,\"amount\":1000,\"payments\":12,\"toAccountNumber\":\"VIN003\"}"))
+				.andExpect(status().isForbidden());
 	}
 
 }
