@@ -41,20 +41,11 @@ No se encontró un archivo `LICENSE` en el repositorio. Antes de reutilizar la i
 
 Las siguientes capturas corresponden a la versión actual ejecutada localmente con los datos ficticios de demostración. No contienen información bancaria real.
 
-<table>
-  <tr>
-    <td align="center"><strong>Inicio de sesión</strong><br><img src="src/main/resources/static/web/img/screenshot-login.png" alt="Pantalla de inicio de sesión" width="420"></td>
-    <td align="center"><strong>Cuentas y préstamos</strong><br><img src="src/main/resources/static/web/img/screenshot-accounts.png" alt="Vista de cuentas y préstamos" width="420"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Tarjetas</strong><br><img src="src/main/resources/static/web/img/screenshot-cards.png" alt="Vista de tarjetas" width="420"></td>
-    <td align="center"><strong>Transferencias</strong><br><img src="src/main/resources/static/web/img/screenshot-transfers.png" alt="Vista de transferencias" width="420"></td>
-  </tr>
-  <tr>
-    <td align="center"><strong>Préstamos</strong><br><img src="src/main/resources/static/web/img/screenshot-loans.png" alt="Vista de préstamos" width="420"></td>
-    <td></td>
-  </tr>
-</table>
+### Vista principal
+
+<p align="center">
+  <img src="src/main/resources/static/web/img/screenshot-accounts.png" alt="Vista desktop de cuentas y préstamos" width="100%">
+</p>
 
 ## Requisitos para Windows
 
