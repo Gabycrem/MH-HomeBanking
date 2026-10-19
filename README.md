@@ -41,25 +41,20 @@ No se encontró un archivo `LICENSE` en el repositorio. Antes de reutilizar la i
 
 Las siguientes capturas corresponden a la versión actual ejecutada localmente con los datos ficticios de demostración. No contienen información bancaria real.
 
-### Inicio de sesión
-
-![Pantalla de inicio de sesión](src/main/resources/static/web/img/screenshot-login.png)
-
-### Cuentas y préstamos
-
-![Vista de cuentas y préstamos](src/main/resources/static/web/img/screenshot-accounts.png)
-
-### Tarjetas
-
-![Vista de tarjetas](src/main/resources/static/web/img/screenshot-cards.png)
-
-### Transferencias
-
-![Vista de transferencias](src/main/resources/static/web/img/screenshot-transfers.png)
-
-### Préstamos
-
-![Vista de préstamos](src/main/resources/static/web/img/screenshot-loans.png)
+<table>
+  <tr>
+    <td align="center"><strong>Inicio de sesión</strong><br><img src="src/main/resources/static/web/img/screenshot-login.png" alt="Pantalla de inicio de sesión" width="420"></td>
+    <td align="center"><strong>Cuentas y préstamos</strong><br><img src="src/main/resources/static/web/img/screenshot-accounts.png" alt="Vista de cuentas y préstamos" width="420"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Tarjetas</strong><br><img src="src/main/resources/static/web/img/screenshot-cards.png" alt="Vista de tarjetas" width="420"></td>
+    <td align="center"><strong>Transferencias</strong><br><img src="src/main/resources/static/web/img/screenshot-transfers.png" alt="Vista de transferencias" width="420"></td>
+  </tr>
+  <tr>
+    <td align="center"><strong>Préstamos</strong><br><img src="src/main/resources/static/web/img/screenshot-loans.png" alt="Vista de préstamos" width="420"></td>
+    <td></td>
+  </tr>
+</table>
 
 ## Requisitos para Windows
 
