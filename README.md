@@ -41,11 +41,27 @@ No se encontró un archivo `LICENSE` en el repositorio. Antes de reutilizar la i
 
 Las siguientes capturas corresponden a la versión actual ejecutada localmente con los datos ficticios de demostración. No contienen información bancaria real.
 
-### Vista principal
+Las capturas fueron tomadas en el mismo viewport desktop y se incorporan sin deformar sus proporciones.
 
-<p align="center">
-  <img src="src/main/resources/static/web/img/screenshot-accounts.png" alt="Vista desktop de cuentas y préstamos" width="100%">
-</p>
+### Inicio de sesión
+
+![Pantalla de inicio de sesión](src/main/resources/static/web/img/screenshot-login.png)
+
+### Cuentas y préstamos
+
+![Vista de cuentas y préstamos](src/main/resources/static/web/img/screenshot-accounts.png)
+
+### Tarjetas
+
+![Vista de tarjetas](src/main/resources/static/web/img/screenshot-cards.png)
+
+### Transferencias
+
+![Vista de transferencias](src/main/resources/static/web/img/screenshot-transfers.png)
+
+### Préstamos
+
+![Vista de préstamos](src/main/resources/static/web/img/screenshot-loans.png)
 
 ## Requisitos para Windows
 
