@@ -1,8 +1,6 @@
 package com.mindhub.homebanking.models;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -10,8 +8,7 @@ public class Card {
 
     //------------------- Propiedades ---------------------//
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String cardHolder;
     private CardType type;

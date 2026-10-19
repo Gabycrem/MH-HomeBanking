@@ -1,20 +1,18 @@
 package com.mindhub.homebanking.models;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
 public class Transaction {
 
     //------------------- Propiedades ---------------------//
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name= "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private TransactionType type;
-    private Double amount;
+    private BigDecimal amount;
     private String description;
     private LocalDateTime date;
 
@@ -28,7 +26,7 @@ public class Transaction {
 
     }
 
-    public Transaction(TransactionType type, Double amount, String description, LocalDateTime date){
+    public Transaction(TransactionType type, BigDecimal amount, String description, LocalDateTime date){
         this.type = type;
         this.amount = amount;
         this.description = description;
@@ -46,11 +44,11 @@ public class Transaction {
         this.type = type;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 

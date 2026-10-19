@@ -4,11 +4,12 @@ import com.mindhub.homebanking.models.Transaction;
 import com.mindhub.homebanking.models.TransactionType;
 
 import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 public class TransactionDTO {
     private Long id;
     private TransactionType type;
-    private  Double amount;
+    private BigDecimal amount;
     private String description;
     private LocalDateTime date;
 
@@ -26,7 +27,7 @@ public class TransactionDTO {
     public TransactionType getType(){
         return type;
     }
-    public Double getAmount(){
+    public BigDecimal getAmount(){
         return amount;
     }
     public String getDescription(){

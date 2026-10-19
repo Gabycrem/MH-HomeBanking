@@ -2,10 +2,9 @@ package com.mindhub.homebanking.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,12 +13,12 @@ public class Account {
 
     //------------------- Propiedades ---------------------//
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(nullable = false, unique = true)
     private String number;
     private LocalDate creationDate;
-    private Double balance;
+    private BigDecimal balance;
 
     // -------------------Relaciones----------------//
     @ManyToOne(fetch = FetchType.EAGER)
@@ -33,7 +32,7 @@ public class Account {
     public Account(){
     }
 
-    public Account(String number, LocalDate creationDate, Double balance){
+    public Account(String number, LocalDate creationDate, BigDecimal balance){
         this.number = number;
         this.creationDate = creationDate;
         this.balance = balance;
@@ -60,11 +59,11 @@ public class Account {
         this.creationDate = creationDate;
     }
 
-    public Double getBalance() {
+    public BigDecimal getBalance() {
         return balance;
     }
 
-    public void setBalance(Double balance) {
+    public void setBalance(BigDecimal balance) {
         this.balance = balance;
     }
 

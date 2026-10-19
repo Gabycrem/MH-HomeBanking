@@ -9,9 +9,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @EnableWebSecurity
 @Configuration
@@ -19,45 +19,33 @@ public class WebAuthorization{
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/api/login","/api/clients").permitAll()
-                .antMatchers( "/web/index.html", "/web/js/**", "/web/css/**", "/web/img/**").permitAll()
-                .antMatchers("/admin/**", "/rest/**").hasAuthority("ADMIN")
-                .antMatchers( "/api/clients/current", "/web/**","/api/logout","/api/clients/current/accounts",
-                        "/api/clients/current/cards", "/api/transactions/**","/api/accounts").hasAnyAuthority("CLIENT", "ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/clients/current/**", "/api/transactions/**").hasAnyAuthority("CLIENT", "ADMIN");
+        http.authorizeHttpRequests(authorize -> authorize
+                .requestMatchers(HttpMethod.POST, "/api/login", "/api/clients").permitAll()
+                .requestMatchers("/web/**", "/").permitAll()
+                .requestMatchers("/h2-console/**").hasAuthority("ADMIN")
+                .requestMatchers("/api/clients/current", "/api/logout", "/api/clients/current/accounts",
+                        "/api/clients/current/cards", "/api/transactions/**", "/api/accounts/{id}")
+                    .hasAnyAuthority("CLIENT", "ADMIN")
+                .requestMatchers("/admin/**", "/rest/**", "/api/clients", "/api/clients/*", "/api/accounts", "/api/cards", "/api/transaction/**")
+                    .hasAuthority("ADMIN")
+                .anyRequest().authenticated())
+                .formLogin(form -> form
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .loginPage("/api/login")
+                        .successHandler((req, res, auth) -> clearAuthenticationAttributes(req))
+                        .failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
+                .logout(logout -> logout
+                        .logoutUrl("/api/logout")
+                        .deleteCookies("JSESSIONID")
+                        .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()))
+                // The supplied academic frontend uses session cookies without a CSRF token.
+                // Keep this explicit for the demo and do not reuse it as production banking config.
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**").disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
-
-        http.formLogin()
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .loginPage("/api/login");
-
-        http.logout().logoutUrl("/api/logout").deleteCookies("JSESSIONID");
-
-        http.csrf().disable();
-
-
-
-        //disabling frameOptions so h2-console can be accessed
-
-        http.headers().frameOptions().disable();
-
-        // if user is not authenticated, just send an authentication failure response
-
-        http.exceptionHandling().authenticationEntryPoint((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-        // if login is successful, just clear the flags asking for authentication
-
-        http.formLogin().successHandler((req, res, auth) -> clearAuthenticationAttributes(req));
-
-        // if login fails, just send an authentication failure response
-
-        http.formLogin().failureHandler((req, res, exc) -> res.sendError(HttpServletResponse.SC_UNAUTHORIZED));
-
-        // if logout is successful, just send a success response
-
-        http.logout().logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler());
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint((req, res, exc) ->
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED)));
 
         return http.build();
     }

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -36,7 +37,7 @@ public class HomebankingApplication {
 			//                        Creando clientes 1 y 2                       //
 			//---------------------------------------------------------------------//
 			Client client1 = new Client("Melba","Morel", "melba@mindhub.com", passwordEncoder.encode("123456"));
-			Client client2 = new Client("Nazarena", "Macre","lalala@gmail.com", passwordEncoder.encode("admin"));
+			Client client2 = new Client("Nazarena", "Macre","admin@mindhub.com", passwordEncoder.encode("admin"));
 
 			//
 			//---------------------------------------------------------------------//
@@ -49,8 +50,8 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			//                        Creando cuentas 1 y 2                        //
 			//---------------------------------------------------------------------//
-			Account account1 = new Account("VIN001",LocalDate.now(), 5000.0);
-			Account account2 = new Account("VIN002", LocalDate.now().plus(Period.ofDays(1)), 7500.0);
+			Account account1 = new Account("VIN001",LocalDate.now(), BigDecimal.valueOf(5000));
+			Account account2 = new Account("VIN002", LocalDate.now().plus(Period.ofDays(1)), BigDecimal.valueOf(7500));
 
 
 			//---------------------------------------------------------------------//
@@ -70,10 +71,10 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			//                    Nuevas Cuentas para Task3                        //
 			//---------------------------------------------------------------------//
-			Account account3 = new Account("VIN003", LocalDate.now(), 2500.0);
-			Account account4 = new Account("VIN004", LocalDate.now(), 15000.0);
-			Account account5 = new Account("VIN005", LocalDate.now(), 30000.0);
-			Account account6 = new Account("VIN006", LocalDate.now(), 100000.0);
+			Account account3 = new Account("VIN003", LocalDate.now(), BigDecimal.valueOf(2500));
+			Account account4 = new Account("VIN004", LocalDate.now(), BigDecimal.valueOf(15000));
+			Account account5 = new Account("VIN005", LocalDate.now(), BigDecimal.valueOf(30000));
+			Account account6 = new Account("VIN006", LocalDate.now(), BigDecimal.valueOf(100000));
 
 
 			//---------------------------------------------------------------------//
@@ -96,23 +97,23 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			//                     Generando nuevas Transactions                   //
 			//---------------------------------------------------------------------//
-			Transaction transaction1 = new Transaction(TransactionType.DEBIT, -500.0, "Débito -500", LocalDateTime.now());
+			Transaction transaction1 = new Transaction(TransactionType.DEBIT, BigDecimal.valueOf(-500), "Débito -500", LocalDateTime.now());
 			account1.addTransaction(transaction1);
 			transactionRepository.save(transaction1);
 
-			Transaction transaction2 = new Transaction(TransactionType.CREDIT, 2500.0, "Crédito $2500", LocalDateTime.now());
+			Transaction transaction2 = new Transaction(TransactionType.CREDIT, BigDecimal.valueOf(2500), "Crédito $2500", LocalDateTime.now());
 			account2.addTransaction(transaction2);
 			transactionRepository.save(transaction2);
 
-			Transaction transaction3 = new Transaction(TransactionType.DEBIT, -100.0, "Débito $100", LocalDateTime.now());
+			Transaction transaction3 = new Transaction(TransactionType.DEBIT, BigDecimal.valueOf(-100), "Débito $100", LocalDateTime.now());
 			account4.addTransaction(transaction3);
 			transactionRepository.save(transaction3);
 
-			Transaction transaction4 = new Transaction(TransactionType.CREDIT, 1500.0, "Crédito $1500", LocalDateTime.now());
+			Transaction transaction4 = new Transaction(TransactionType.CREDIT, BigDecimal.valueOf(1500), "Crédito $1500", LocalDateTime.now());
 			account1.addTransaction(transaction4);
 			transactionRepository.save(transaction4);
 
-			Transaction transaction5 = new Transaction(TransactionType.DEBIT, -1500.0, "Débito $1500", LocalDateTime.now());
+			Transaction transaction5 = new Transaction(TransactionType.DEBIT, BigDecimal.valueOf(-1500), "Débito $1500", LocalDateTime.now());
 			account4.addTransaction(transaction5);
 			transactionRepository.save(transaction5);
 
@@ -120,32 +121,32 @@ public class HomebankingApplication {
 			//---------------------------------------------------------------------//
 			//                        Créditos para Task4                          //
 			//---------------------------------------------------------------------//
-			Loan loan1 = new Loan("Hipotecario", 500000.0, List.of(12,24,36,48,60));
+			Loan loan1 = new Loan("Hipotecario", BigDecimal.valueOf(500000), List.of(12,24,36,48,60));
 			loanRepository.save(loan1);
-			Loan loan2 = new Loan("Personal", 100000.0, List.of(6,12,24));
+			Loan loan2 = new Loan("Personal", BigDecimal.valueOf(100000), List.of(6,12,24));
 			loanRepository.save(loan2);
-			Loan loan3 = new Loan("Automotriz", 300000.0, List.of(6,12,24,36));
+			Loan loan3 = new Loan("Automotriz", BigDecimal.valueOf(300000), List.of(6,12,24,36));
 			loanRepository.save(loan3);
 
 			//---------------------------------------------------------------------//
 			//                  Créditos para Melba y segundo client               //
 			//---------------------------------------------------------------------//
-			ClientLoan clientLoan1 = new ClientLoan(400000.0, 60);
+			ClientLoan clientLoan1 = new ClientLoan(BigDecimal.valueOf(400000), 60);
 			client1.addClientLoans(clientLoan1);
 			loan1.addClientLoans(clientLoan1);
 			clientLoanRepository.save(clientLoan1);
 
-			ClientLoan clientLoan2 = new ClientLoan(50000.0, 12);
+			ClientLoan clientLoan2 = new ClientLoan(BigDecimal.valueOf(50000), 12);
 			loan2.addClientLoans(clientLoan2);
 			client1.addClientLoans(clientLoan2);
 			clientLoanRepository.save(clientLoan2);
 
-			ClientLoan clientLoan3 = new ClientLoan(100000.0, 24);
+			ClientLoan clientLoan3 = new ClientLoan(BigDecimal.valueOf(100000), 24);
 			client2.addClientLoans(clientLoan3);
 			loan2.addClientLoans(clientLoan3);
 			clientLoanRepository.save(clientLoan3);
 
-			ClientLoan clientLoan4 = new ClientLoan(200000.0, 36);
+			ClientLoan clientLoan4 = new ClientLoan(BigDecimal.valueOf(200000), 36);
 			loan3.addClientLoans(clientLoan4);
 			client2.addClientLoans(clientLoan4);
 			clientLoanRepository.save(clientLoan4);
